@@ -1,0 +1,12 @@
+goodra.png : credits = DarkusShadow on DeviantARt
+pikachy.png : credits = victorluiscolnago
+sprigadio.png : credits = DarkusShadow
+
+Tilesets:
+Pokemon tileset : WesleyFG
+Exterior: Metrocity from itch.io
+
+
+
+
+///-- https://discord.gg/pWCncYjc --\\\
