@@ -18,14 +18,22 @@ class Game:
         self.running = True
 
         self.player = Player("spritesheet/ash_atchoum_walk.png", 4, 4, self.keys)
+        self.player_spawn = None
 
         self.tmx_data = pytmx.load_pygame("venv/assets/map/map_0.tmx")
+        self.collisions = []
+        for obj in self.tmx_data.objects:
+            if obj.name == "collision":
+                self.collisions.append(pygame.rect.Rect(obj.x, obj.y, obj.width, obj.height))
+            elif obj.name == "player_spawn":
+                self.player_spawn = [obj.x, obj.y]
+        self.player.collisions = self.collisions
         self.map_data = pyscroll.TiledMapData(self.tmx_data)
         self.map_layer = pyscroll.orthographic.BufferedRenderer(self.map_data, self.display_surf.get_size())
         self.map_layer.zoom = 3
         self.group = pyscroll.PyscrollGroup(map_layer=self.map_layer, default_layer=4)
-
         self.group.add(self.player)
+        self.player.rect.center = self.player_spawn
         
     
     def run(self):

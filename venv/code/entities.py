@@ -16,26 +16,47 @@ class Entity(pygame.sprite.Sprite):
         self.image = self.spritesheet.subsurface((0, 0, self.frame_width, self.frame_height))
         self.all_images = self.get_all_images()
         self.rect = self.image.get_rect()
+        self.hitbox = pygame.rect.Rect((0, 0, self.frame_width, self.frame_height // 2))
+        self.collisions = None
+    
+    def update(self):
+        self.hitbox.midbottom = self.rect.midbottom
     
     def move_right(self):
-        self.rect.x += 1
+        self.hitbox.x += 1
+        if not self.check_collision():
+            self.rect.x += 1
         self.animation("right")
     
     def move_left(self):
-        self.rect.x -= 1
+        self.hitbox.x -= 1
+        if not self.check_collision():
+            self.rect.x -= 1
         self.animation("left")
 
     def move_up(self):
-        self.rect.y -= 1
+        self.hitbox.y -= 1
+        if not self.check_collision():
+            self.rect.y -= 1
         self.animation("up")
     
     def move_down(self):
-        self.rect.y += 1
+        self.hitbox.y += 1
+        if not self.check_collision():
+            self.rect.y += 1
         self.animation("down")
 
     def animation(self, direction):
         self.frame_index += 7 * self.dt
         self.image = self.all_images[direction][int(self.frame_index) % len(self.all_images[direction])]
+    
+    def check_collision(self):
+        if not self.collisions:
+            return False
+        for collision in self.collisions:
+            if self.hitbox.colliderect(collision):
+                return True
+        return False
     
     def get_all_images(self):
         frames = {

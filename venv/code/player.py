@@ -8,6 +8,7 @@ class Player(Entity):
         self.keys = keys
     
     def update(self):
+        super().update()
         self.check_move()
     
     def check_move(self):
