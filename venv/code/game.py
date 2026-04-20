@@ -1,8 +1,8 @@
 import pygame
-from map import Map
+from .map import Map
 from sys import exit
 
-from player import Player
+from .player import Player
 
 pygame.init()
 
