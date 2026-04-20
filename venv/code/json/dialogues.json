@@ -1,0 +1,21 @@
+{
+  "professor": {
+    "intro": {
+      "text": [
+        "Bonjour, comment puis-je vous aider ?",
+        "Je vois, je vois...",
+        "Bien sûr, mais d'abord, comment t'appelles-tu ?",
+        "Moi, je m'appelle Chen. Pour t'aider dans cette quête, je t'offre un petit cadeau : 30 Pokéballs !",
+        "À l'est d'ici se trouve un portail par lequel tu entreras dans le monde des Pokémon.",
+        "On se retrouve dès que tu auras ton premier Pokémon !"
+      ],
+      "response": [
+        "Bonjour, je suis là pour devenir le meilleur dresseur de cette ville.",
+        "Je voudrais savoir si vous pourriez m'aider dans cette quête ?",
+        "Je m'appelle Sacha, et vous ?",
+        "Merci, mais où pourrais-je trouver mes premiers Pokémon ?",
+        "D'accord, merci pour l'info !"
+      ]
+    }
+  }
+}
