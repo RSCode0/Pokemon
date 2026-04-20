@@ -1,5 +1,5 @@
 import requests
-from .entities import PokemonEntity
+from entities import PokemonEntity
 
 class Pokemon:
     def __init__(self, name):

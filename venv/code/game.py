@@ -1,8 +1,8 @@
 import pygame
-from .map import Map
+from map import Map
 from sys import exit
 
-from .player import Player
+from player import Player
 
 pygame.init()
 
@@ -17,7 +17,7 @@ class Game:
         self.running = True
 
         self.player = Player("spritesheet/ash_atchoum_walk.png", 4, 4, self.keys)
-        self.map = Map(self.display_surf)
+        self.map = Map(self.display_surf, self.keys)
         self.map.add_player(self.player)
         if self.player.pokemon:
             self.map.add_pokemon()

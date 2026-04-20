@@ -2,10 +2,13 @@ import pyscroll
 import pytmx
 import pygame
 
+from entities import NPC
+
 class Map:
-    def __init__(self, screen):
+    def __init__(self, screen, keys):
         self.map = ""
         self.screen = screen
+        self.keys = keys
         self.tmx_data = None
         self.map_data = None
         self.map_layer = None
@@ -14,6 +17,7 @@ class Map:
         self.player_spawn = None
         self.collisions = []
         self.tps = None
+        self.npcs = {}
         self.load_map("map_0")
     
     def update(self):
@@ -21,6 +25,7 @@ class Map:
         self.check_tp()
         self.group.center(self.player.rect)
         self.group.draw(self.screen)
+        self.npc_hit()
 
     def load_map(self, map):
         self.tmx_data = pytmx.load_pygame(f"venv/assets/map/{map}.tmx")
@@ -32,6 +37,7 @@ class Map:
         self.map_layer = pyscroll.BufferedRenderer(self.map_data, self.screen.get_size())
         self.zoom_map()
         self.group = pyscroll.PyscrollGroup(map_layer=self.map_layer, default_layer=4)
+        self.add_npcs()
         if self.player:
             self.add_player(self.player)
             self.group.add(self.player.pokemon.entity)
@@ -82,3 +88,20 @@ class Map:
             self.player.pokemon.entity.collisions = self.collisions
             self.player.pokemon.entity.rect.left = self.player.rect.right
             self.player.pokemon.entity.rect.top = self.player.rect.bottom
+    
+    def add_npcs(self):
+        for obj in self.tmx_data.objects:
+            if obj.name.startswith("npc"):
+                npc_name = obj.name.split(" ")[1]
+                self.npcs[npc_name] = NPC(f"spritesheet/{npc_name}_{self.map}.png", 4, 4, npc_name)
+                self.collisions.append(self.npcs[npc_name].hitbox)
+                self.group.add(self.npcs[npc_name], layer=1)
+                self.npcs[npc_name].rect.center = [obj.x, obj.y]
+                self.npcs[npc_name].update()
+                
+    def npc_hit(self):
+        for npc in self.npcs:
+            if self.npcs[npc].rect.colliderect(self.player.rect):
+                self.npcs[npc].active_dialogue(self.keys, self.screen)
+            elif self.npcs[npc].dialogue_active:
+                self.npcs[npc].dialogue_active = False

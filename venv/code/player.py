@@ -1,6 +1,6 @@
 import pygame
-from .entities import Entity
-from .pokemon import Pokemon
+from entities import Entity
+from pokemon import Pokemon
 
 class Player(Entity):
     def __init__(self, path, cols, rows, keys):
