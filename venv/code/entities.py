@@ -1,6 +1,8 @@
 import pygame
 import json
 
+from save import Save
+
 class Entity(pygame.sprite.Sprite):
     def __init__(self, path, cols, rows):
         super().__init__()
@@ -109,11 +111,15 @@ class NPC(Entity):
         self.font = pygame.font.Font(None, 30)
         self.npc_dialogues = []
         self.player_dialogues = []
+        self.player_inventory = None
         self.npc_dialogue_index = 0
         self.player_dialogue_index = 0
         self.npc_turn = True
         self.dialogue_active = False
+        self.is_condition = False
         self.current_text = ""
+        self.action = ""
+        self.condition = ""
     
     def update(self):
         self.hitbox.bottomleft = self.rect.bottomleft
@@ -131,10 +137,17 @@ class NPC(Entity):
             with open("venv/code/json/save.json") as file:
                 data_save = json.load(file)
                 self.last_dialogue_id = data_save["dialogues"][self.name]
-                self.npc_dialogues = data_dialogues[self.name][self.last_dialogue_id]["text"]
-                self.player_dialogues = data_dialogues[self.name][self.last_dialogue_id]["response"]
+                if self.last_dialogue_id.startswith("condition"):
+                    self.npc_dialogues = data_dialogues[self.name][self.last_dialogue_id]["response"]
+                    self.condition = data_dialogues[self.name][self.last_dialogue_id]["condition"]
+                    self.player_dialogues = []
+                    self.is_condition = True
+                else:
+                    self.npc_dialogues = data_dialogues[self.name][self.last_dialogue_id]["text"]
+                    self.player_dialogues = data_dialogues[self.name][self.last_dialogue_id]["response"]
     
-    def active_dialogue(self, keys, screen):
+    def active_dialogue(self, keys, screen, player_inventory):
+        self.player_inventory = player_inventory
         if self.dialogue_active:
             self.draw_current_dialogue(screen)
             if pygame.K_SPACE in keys:
@@ -168,6 +181,8 @@ class NPC(Entity):
         
         with open("venv/code/json/save.json", "w", encoding="utf-8") as file:
             json.dump(data_save, file, ensure_ascii=False, indent=4)
+        
+        Save.save_inventory(self.player_inventory)
     
     def draw_current_dialogue(self, screen):
         if self.current_text:
@@ -179,6 +194,7 @@ class NPC(Entity):
         current_line = ""
     
         for word in words:
+            
             test_line = current_line + word + " "
             if self.font.size(test_line)[0] < 1280 - 90:
                 current_line = test_line
@@ -199,17 +215,25 @@ class NPC(Entity):
             self.next_section()
             self.dialogue_active = False
             return
+        
+        if self.is_condition:
+            self.current_text = self.npc_dialogues
+            self.check_condition()
+            return
 
         if self.npc_turn:
             if self.npc_dialogue_index < len(self.npc_dialogues):
                 self.current_text = self.npc_dialogues[self.npc_dialogue_index]
                 self.npc_dialogue_index += 1
-                self.npc_turn = False
+                if not self.is_condition:
+                    self.npc_turn = False
         else:
             if self.player_dialogue_index < len(self.player_dialogues):
                 self.current_text = self.player_dialogues[self.player_dialogue_index]
                 self.player_dialogue_index += 1
                 self.npc_turn = True
+        
+        self.current_text = self.handle_action_tag(self.current_text)
             
     def start_dialogue(self):
         self.load_dialogues()
@@ -217,3 +241,35 @@ class NPC(Entity):
         self.player_dialogue_index = 0
         self.npc_turn = True
         self.advance_dialogue()
+    
+    def handle_action_tag(self, text):
+        if not text:
+            return text
+        
+        start = text.find("[")
+        end = text.find("]", start + 1)
+        if start != -1 and end != -1:
+            self.action = text[start + 1:end].strip()
+            self.npc_action()
+            text = (text[:start] + text[end + 1:]).strip()
+            
+        return text
+
+    def npc_action(self):
+        if self.action:
+            action_parts = self.action.split(" ")
+            if action_parts[0] == "Give":
+                item = action_parts[2]
+                quantity = int(action_parts[1])
+                self.player_inventory.add_item(item, quantity)
+                self.action = ""
+        return
+                
+                    
+    def check_condition(self):
+        if self.condition.startswith("Have"):
+            item = self.condition.split(" ")[2]
+            quantity = int(self.condition.split(" ")[1])
+            if self.player_inventory[item] >= quantity:
+                self.is_condition = False
+                self.next_section()

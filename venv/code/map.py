@@ -102,6 +102,6 @@ class Map:
     def npc_hit(self):
         for npc in self.npcs:
             if self.npcs[npc].rect.colliderect(self.player.rect):
-                self.npcs[npc].active_dialogue(self.keys, self.screen)
+                self.npcs[npc].active_dialogue(self.keys, self.screen, self.player.inventory)
             elif self.npcs[npc].dialogue_active:
                 self.npcs[npc].dialogue_active = False

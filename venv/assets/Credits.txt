@@ -1,8 +1,21 @@
-goodra.png : credits = DarkusShadow on DeviantARt
-pikachu.png : credits = victorluiscolnago
-sprigadio.png : credits = DarkusShadow
+
+Pokemons:
+goodra.png : credits = DarkusShadow (DeviantARt)
+pikachu.png : credits = victorluiscolnago (DeviantARt)
+sprigadio.png : credits = DarkusShadow (DeviantARt)
 
 Tilesets:
 Pokemon tileset : WesleyFG
 Exterior: Metrocity from itch.io
+House_interior(1) : nicnubill (DeviantArt)
+House_interior(2) : milkian (DeviantArt)
+Hospital_interior : skatefilter5 (DeviantArt)
+
+spritesheets:
+Ash_atchoum_walk : PurpleZaffre (DeviantARt)
+professor_map_0.png : DriftwoodW (DeviantARt)
+
+Items : 
+mega-potion : NorixRaius (DeviantARt)
+pokeball : DragonMasters525 (DeviantARt)
 

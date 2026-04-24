@@ -5,7 +5,7 @@
         "Bonjour, comment puis-je vous aider ?",
         "Je vois, je vois...",
         "Bien sûr, mais d'abord, comment t'appelles-tu ?",
-        "Moi, je m'appelle Chen. Pour t'aider dans cette quête, je t'offre un petit cadeau : 30 Pokéballs !",
+        "Moi, je m'appelle Chen. Pour t'aider dans cette quête, je t'offre un petit cadeau : 30 Pokéballs ! [Give 30 pokeball]",
         "À l'est d'ici se trouve un portail par lequel tu entreras dans le monde des Pokémon.",
         "On se retrouve dès que tu auras ton premier Pokémon !"
       ],
@@ -16,6 +16,10 @@
         "Merci, mais où pourrais-je trouver mes premiers Pokémon ?",
         "D'accord, merci pour l'info !"
       ]
+    },
+    "condition 1": {
+      "condition": "Have 1 mega_potion",
+      "response": "Vous n'avez pas encore la mega potion"
     }
   }
 }

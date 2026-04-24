@@ -1,12 +1,14 @@
 import pygame
 from entities import Entity
 from pokemon import Pokemon
+from inventory import Inventory
 
 class Player(Entity):
     def __init__(self, path, cols, rows, keys):
         super().__init__(path, cols, rows)
         self.keys = keys
         self.pokemon = Pokemon("pikachu")
+        self.inventory = Inventory()
     
     def update(self):
         super().update()

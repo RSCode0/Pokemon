@@ -1,5 +1,9 @@
 {
     "dialogues": {
-        "professor": "intro"
+        "professor": "condition 1"
+    },
+    "inventory": {
+        "pokeball": 30,
+        "mega_potion": 0
     }
 }
